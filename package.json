@@ -1,0 +1,24 @@
+{
+  "name": "rest-api-express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:hbeanjarah/rest-api-express.git",
+  "author": "Be Anjara Houssen <hbeanjarahoussen@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.2",
+    "@babel/node": "^7.17.10",
+    "@babel/preset-env": "^7.18.2",
+    "nodemon": "^2.0.16"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "remove": "^0.1.5"
+  }
+}
