@@ -5,11 +5,42 @@ import cors from "cors";
 const PORT = process.env.PORT;
 const app = express();
 
-app.use(cors);
+app.use(cors());
+
+let users = {
+  1: {
+    id: "1",
+    username: "Robin Wieruch",
+  },
+  2: {
+    id: "2",
+    username: "Dave Davids",
+  },
+};
+
+let messages = {
+  1: {
+    id: "1",
+    text: "Hello World",
+    userId: "1",
+  },
+  2: {
+    id: "2",
+    text: "By World",
+    userId: "2",
+  },
+};
 
 app.get("/", (req, res) => {
-  console.log("req", req);
   res.send("Hello there");
+});
+
+app.get("/users", (req, res) => {
+  return res.send(Object.values(users));
+});
+
+app.get("/messages", (req, res) => {
+  return res.send(Object.values(messages));
 });
 
 app.listen(PORT, () => {
