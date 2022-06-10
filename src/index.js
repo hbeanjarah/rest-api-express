@@ -39,6 +39,18 @@ app.get("/users", (req, res) => {
   return res.send(Object.values(users));
 });
 
+app.get("/user/:id", (req, res) => {
+  const { id } = req.params;
+  if (!users[id]) return res.send({});
+  return res.send(users[id]);
+});
+
+app.get("/message/:id", (req, res) => {
+  const { id } = req.params;
+  if (!messages[id]) return res.send({});
+  return res.send(messages[id]);
+});
+
 app.get("/messages", (req, res) => {
   return res.send(Object.values(messages));
 });
