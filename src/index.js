@@ -1,9 +1,8 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { v4 as uuidv4 } from "uuid";
 import models from "./models/index.js";
-
+import routes from "./routes/index.js";
 const PORT = process.env.PORT;
 const app = express();
 
@@ -19,44 +18,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(logger);
 
-app.get("/", (req, res) => {
-  res.send("Hello there");
-});
+app.use(authContext);
 
-app.get("/users", (req, res) => {
-  return res.send(Object.values(models.users));
-});
+app.use("/session", routes.session);
 
-app.get("/user/:id", userByIdPermission, (req, res) => {
-  const { id } = req.params;
-  if (!models.users[id]) return res.send({});
-  console.log("is called");
-  return res.send(models.users[id]);
-});
-
-app.get("/message/:id", (req, res) => {
-  const { id } = req.params;
-  if (!models.messages[id]) return res.send({});
-  return res.send(models.messages[id]);
-});
-
-app.get("/messages", (req, res) => {
-  return res.send(Object.values(models.messages));
-});
-
-app.post("/messages", (req, res) => {
-  const id = uuidv4();
-  const content = req.body.content;
-  let message = {
-    id,
-    content,
-  };
-
-  message = {
-    [id]: message,
-  };
-  return res.send(message);
-});
+app.use("/messages", routes.message);
+app.use("/users", routes.user);
 
 /**
  * Middleware
@@ -68,12 +35,14 @@ function logger(req, res, next) {
   console.log("Activity log after next ...");
 }
 
-function userByIdPermission(req, res, next) {
-  console.log("userByIdPermission log before next ...");
-  if (req.params.id == 0) next("route");
-  else next();
-  console.log("userByIdPermission log after next ...");
+function authContext(req, res, next) {
+  req.context = {
+    models,
+    me: models.users[2],
+  };
+  next();
 }
+
 app.listen(PORT, () => {
   console.log("Server is running on port " + PORT);
 });
