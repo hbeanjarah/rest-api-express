@@ -12,6 +12,12 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
+/**
+ * Application level middleware
+ */
+
+app.use(logger);
+
 let users = {
   1: {
     id: "1",
@@ -44,9 +50,10 @@ app.get("/users", (req, res) => {
   return res.send(Object.values(users));
 });
 
-app.get("/user/:id", (req, res) => {
+app.get("/user/:id", userByIdPermission, (req, res) => {
   const { id } = req.params;
   if (!users[id]) return res.send({});
+  console.log("is called");
   return res.send(users[id]);
 });
 
@@ -62,8 +69,6 @@ app.get("/messages", (req, res) => {
 
 app.post("/messages", (req, res) => {
   const id = uuidv4();
-
-  console.log("req.body", req.body);
   const content = req.body.content;
   let message = {
     id,
@@ -76,6 +81,22 @@ app.post("/messages", (req, res) => {
   return res.send(message);
 });
 
+/**
+ * Middleware
+ */
+
+function logger(req, res, next) {
+  console.log("Activity log before next ...");
+  next();
+  console.log("Activity log after next ...");
+}
+
+function userByIdPermission(req, res, next) {
+  console.log("userByIdPermission log before next ...");
+  if (req.params.id == 0) next("route");
+  else next();
+  console.log("userByIdPermission log after next ...");
+}
 app.listen(PORT, () => {
   console.log("Server is running on port " + PORT);
 });
