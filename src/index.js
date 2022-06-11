@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { v4 as uuidv4 } from "uuid";
+import models from "./models/index.js";
 
 const PORT = process.env.PORT;
 const app = express();
@@ -18,53 +19,29 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(logger);
 
-let users = {
-  1: {
-    id: "1",
-    username: "Robin Wieruch",
-  },
-  2: {
-    id: "2",
-    username: "Dave Davids",
-  },
-};
-
-let messages = {
-  1: {
-    id: "1",
-    text: "Hello World",
-    userId: "1",
-  },
-  2: {
-    id: "2",
-    text: "By World",
-    userId: "2",
-  },
-};
-
 app.get("/", (req, res) => {
   res.send("Hello there");
 });
 
 app.get("/users", (req, res) => {
-  return res.send(Object.values(users));
+  return res.send(Object.values(models.users));
 });
 
 app.get("/user/:id", userByIdPermission, (req, res) => {
   const { id } = req.params;
-  if (!users[id]) return res.send({});
+  if (!models.users[id]) return res.send({});
   console.log("is called");
-  return res.send(users[id]);
+  return res.send(models.users[id]);
 });
 
 app.get("/message/:id", (req, res) => {
   const { id } = req.params;
-  if (!messages[id]) return res.send({});
-  return res.send(messages[id]);
+  if (!models.messages[id]) return res.send({});
+  return res.send(models.messages[id]);
 });
 
 app.get("/messages", (req, res) => {
-  return res.send(Object.values(messages));
+  return res.send(Object.values(models.messages));
 });
 
 app.post("/messages", (req, res) => {
