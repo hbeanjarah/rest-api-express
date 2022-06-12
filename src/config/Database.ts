@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize';
+import Logging from '../Library/Logging';
 
 export class Database {
     public DatabaseName: string;
@@ -23,9 +24,10 @@ export class Database {
     async checkConnection() {
         try {
             await this.createDatabase().authenticate();
-            console.log('Connexion has been etablished successfully');
+            Logging.info('Connexion has been etablished successfully');
         } catch (error) {
-            console.log('Error etablishing ', error);
+            Logging.error('Error etablishing connexion');
+            Logging.error(error);
         }
     }
 }
