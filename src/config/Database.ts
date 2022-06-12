@@ -22,12 +22,6 @@ export class Database {
     }
 
     async checkConnection() {
-        try {
-            await this.createDatabase().authenticate();
-            Logging.info('Connexion has been etablished successfully');
-        } catch (error) {
-            Logging.error('Error etablishing connexion');
-            Logging.error(error);
-        }
+        return this.createDatabase().authenticate();
     }
 }

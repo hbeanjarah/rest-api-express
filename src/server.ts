@@ -19,11 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 
 DatbaseInstance.checkConnection()
     .then(() => startServer())
-    .catch((error) => Logging.error(error));
+    .catch((error) => Logging.error(`Error on Establishing connexion ${error}`));
 
 const startServer = () => {
     app.listen(SERVER_PORT, () => {
         Logging.log('Server is running on port ' + SERVER_PORT);
     });
 };
- 
